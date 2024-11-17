@@ -29,17 +29,19 @@ test_loader = DataLoader(dataset=test_dataset, batch_size=32, shuffle=False)
 print(f"Train_loader size: {len(train_loader)}")
 print(f"Test_loader size: {len(test_loader)}")
 
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
 model_name = "vit_r5"
 with open(f"{model_name}.yml", "r") as file:
     config = yaml.safe_load(file)
 
 hyperparams = config["hyperparams"]
 
-model = ViT(**hyperparams)
+model = ViT(**hyperparams).to(device)
 # model = CNN()
 # now load the model params
-# model.load_state_dict(torch.load("vit_r2.pth", weights_only=True))
-# print("loaded model")
+model.load_state_dict(torch.load(f"{model_name}.pth", weights_only=True))
+print("loaded model")
 criterion = torch.nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters())
 
@@ -49,10 +51,10 @@ train_losses = []
 test_losses = []
 for epoch in range(num_epochs):
     train_loss, train_acc = train_one_epoch(model, train_loader, criterion,
-                                            optimizer, epoch)
+                                            optimizer, epoch, device)
 
     val_loss, val_acc = test_one_epoch(model, test_loader,
-                                       criterion, epoch)
+                                       criterion, epoch, device)
 
     train_losses.append(train_loss)
     test_losses.append(val_loss)
