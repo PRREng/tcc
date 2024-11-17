@@ -5,7 +5,7 @@ from tqdm import tqdm
 
 
 def train_one_epoch(model, data_loader: DataLoader, criterion,
-                    optimizer: Optimizer, epoch: int):
+                    optimizer: Optimizer, epoch: int, device: str="cpu"):
     model.train()
     total_loss = 0.0
     avg_acc = 0.0
@@ -39,7 +39,7 @@ def train_one_epoch(model, data_loader: DataLoader, criterion,
 
 
 def test_one_epoch(model, data_loader: DataLoader, criterion,
-                   epoch: int):
+                   epoch: int, device: str="cpu"):
     model.eval()
     total_loss = 0.0
     avg_acc = 0.0
