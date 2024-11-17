@@ -12,7 +12,7 @@ def train_one_epoch(model, data_loader: DataLoader, criterion,
     loop = tqdm(data_loader, desc=f"Epoch {epoch}", unit="batch")
     for i, batch in enumerate(loop):
 
-        x, y = batch.to(device)
+        x, y = batch[0].to(device), batch[1].to(device)
         # forward pass
         y_hat = model(x)
 
@@ -46,7 +46,7 @@ def test_one_epoch(model, data_loader: DataLoader, criterion,
     loop = tqdm(data_loader, desc=f"Epoch {epoch}", unit="batch")
     for i, batch in enumerate(loop):
 
-        x, y = batch.to(device)
+        x, y = batch[0].to(device), batch[1].to(device)
         # forward pass
         y_hat = model(x)
 
