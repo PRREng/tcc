@@ -9,8 +9,13 @@ from sklearn.model_selection import train_test_split
 from vit import ViT
 import matplotlib.pyplot as plt
 from epoch import train_one_epoch, test_one_epoch
+import argparse
 # from tqdm import tqdm
 # from cnn import CNN
+
+ap = argparse.ArgumentParser()
+ap.add_argument("-m", "--model", required=True, help="name of the model")
+args = vars(ap.parse_args())
 
 # carregue os dados formatados
 X, y = hreader.getData()
@@ -29,19 +34,18 @@ test_loader = DataLoader(dataset=test_dataset, batch_size=32, shuffle=False)
 print(f"Train_loader size: {len(train_loader)}")
 print(f"Test_loader size: {len(test_loader)}")
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-model_name = "vit_r5"
+# Construct the argument parser
+model_name = args["model"]
 with open(f"{model_name}.yml", "r") as file:
     config = yaml.safe_load(file)
 
 hyperparams = config["hyperparams"]
 
-model = ViT(**hyperparams).to(device)
+model = ViT(**hyperparams)
 # model = CNN()
 # now load the model params
-model.load_state_dict(torch.load(f"{model_name}.pth", weights_only=True))
-print("loaded model")
+# model.load_state_dict(torch.load("vit_r2.pth", weights_only=True))
+# print("loaded model")
 criterion = torch.nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters())
 
@@ -51,10 +55,10 @@ train_losses = []
 test_losses = []
 for epoch in range(num_epochs):
     train_loss, train_acc = train_one_epoch(model, train_loader, criterion,
-                                            optimizer, epoch, device)
+                                            optimizer, epoch)
 
     val_loss, val_acc = test_one_epoch(model, test_loader,
-                                       criterion, epoch, device)
+                                       criterion, epoch)
 
     train_losses.append(train_loss)
     test_losses.append(val_loss)
