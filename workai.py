@@ -49,7 +49,7 @@ model = ViT(**hyperparams)
 criterion = torch.nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters())
 
-num_epochs = 30
+num_epochs = 90
 
 train_losses = []
 test_losses = []
