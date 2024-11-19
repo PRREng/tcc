@@ -494,7 +494,7 @@ if __name__ == "__main__":
     number_of_circuit = 5
 
     # Number of spectrum in each circuit
-    batch_size = 8192
+    batch_size = 32768
 
     # number of data points in each spectrum (plot)
     number_of_points = 100
