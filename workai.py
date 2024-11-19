@@ -29,14 +29,14 @@ train_dataset = dataset.MyDataSet(X_train, y_train)
 test_dataset = dataset.MyDataSet(X_test, y_test)
 
 # crie o dataloader
-train_loader = DataLoader(dataset=train_dataset, batch_size=128, shuffle=True)
+train_loader = DataLoader(dataset=train_dataset, batch_size=1024, shuffle=True)
 test_loader = DataLoader(dataset=test_dataset, batch_size=32, shuffle=False)
 print(f"Train_loader size: {len(train_loader)}")
 print(f"Test_loader size: {len(test_loader)}")
 
 # Construct the argument parser
 model_name = args["model"]
-with open(f"{model_name}.yml", "r") as file:
+with open("vit_r8.yml", "r") as file:
     config = yaml.safe_load(file)
 
 hyperparams = config["hyperparams"]
@@ -44,12 +44,12 @@ hyperparams = config["hyperparams"]
 model = ViT(**hyperparams)
 # model = CNN()
 # now load the model params
-# model.load_state_dict(torch.load("vit_r2.pth", weights_only=True))
-# print("loaded model")
+model.load_state_dict(torch.load(f"{model_name}.pth", weights_only=True))
+print("loaded model")
 criterion = torch.nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters())
 
-num_epochs = 90
+num_epochs = 310
 
 train_losses = []
 test_losses = []
