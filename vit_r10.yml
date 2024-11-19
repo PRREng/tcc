@@ -1,0 +1,9 @@
+hyperparams:  
+    in_features: 2
+    d_model: 50
+    seq_len: 100
+    num_heads: 5
+    ff_d: 128 
+    num_layers: 6 
+    num_classes: 5
+    dropout: 0.
