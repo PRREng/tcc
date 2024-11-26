@@ -3,6 +3,7 @@ import hreader
 import dataset
 import torch
 
+from torchvision import transforms as tt
 from torch.utils.data import DataLoader
 from sklearn.model_selection import train_test_split
 from vit import ViT
@@ -26,8 +27,10 @@ X_train, X_test, y_train, y_test = train_test_split(
 )
 
 # crie o dataset
-train_dataset = dataset.MyDataSet(X_train, y_train)
-test_dataset = dataset.MyDataSet(X_test, y_test)
+train_dataset = dataset.MyDataSet(X_train, y_train,
+                                  transform=tt.Normalize([0.5], [0.5]))
+test_dataset = dataset.MyDataSet(X_test, y_test,
+                                 transform=tt.Normalize([0.5], [0.5]))
 
 # crie o dataloader
 train_loader = DataLoader(dataset=train_dataset, batch_size=1024, shuffle=True)
