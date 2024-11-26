@@ -16,9 +16,11 @@ class MyDataSet(Dataset):
     def __getitem__(self, index):
         sample = self.features[index, :, :]
         annotation = self.labels[index]  # there's 5 classes
+        sample = sample.view(1, 100, 2)
         if self.transform:
             sample = self.transform(sample)
         if self.target_transform:
             annotation = self.target_transform(annotation)
+        sample = sample.squeeze()
 
         return sample, annotation
