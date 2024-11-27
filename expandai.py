@@ -54,6 +54,9 @@ if args["load"]:
     print("loaded model")
 criterion = torch.nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters())
+scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode="min",
+                                                       factor=0.5, patience=20,
+                                                       min_lr=1e-6)
 
 num_epochs = 50
 
@@ -66,6 +69,7 @@ for epoch in range(num_epochs):
 
     val_loss, val_acc = test_one_epoch(model, test_loader, criterion,
                                        epoch, device)
+    scheduler.step(val_loss)
 
     train_losses.append(train_loss)
     test_losses.append(val_loss)
