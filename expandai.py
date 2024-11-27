@@ -14,6 +14,7 @@ import argparse
 
 ap = argparse.ArgumentParser()
 ap.add_argument("-m", "--model", required=True, help="name of the model")
+ap.add_argument("-l", "--load", default=False, help="load the model")
 args = vars(ap.parse_args())
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -30,8 +31,11 @@ train_dataset = dataset2.MyDataSet(X_train, y_train)
 test_dataset = dataset2.MyDataSet(X_test, y_test)
 
 # crie o dataloader
-train_loader = DataLoader(dataset=train_dataset, batch_size=1024, shuffle=True)
-test_loader = DataLoader(dataset=test_dataset, batch_size=32, shuffle=False)
+train_loader = DataLoader(dataset=train_dataset,
+                          batch_size=1024, shuffle=True,
+                          pin_memory=True)
+test_loader = DataLoader(dataset=test_dataset, batch_size=32,
+                         shuffle=False, pin_memory=True)
 print(f"Train_loader size: {len(train_loader)}")
 print(f"Test_loader size: {len(test_loader)}")
 
@@ -45,8 +49,9 @@ hyperparams = config["hyperparams"]
 model = ViT(**hyperparams).to(device)
 # model = CNN()
 # now load the model params
-# model.load_state_dict(torch.load(f"{model_name}.pth", weights_only=True))
-# print("loaded model")
+if args["load"]:
+    model.load_state_dict(torch.load(f"{model_name}.pth", weights_only=True))
+    print("loaded model")
 criterion = torch.nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters())
 

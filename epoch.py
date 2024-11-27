@@ -5,14 +5,16 @@ from tqdm import tqdm
 
 
 def train_one_epoch(model, data_loader: DataLoader, criterion,
-                    optimizer: Optimizer, epoch: int, device: str="cpu"):
+                    optimizer: Optimizer, epoch: int,
+                    device: torch.device):
     model.train()
     total_loss = 0.0
     avg_acc = 0.0
-    loop = tqdm(data_loader, desc=f"Epoch {epoch}", unit="batch")
-    for i, batch in enumerate(loop):
+    accumulation_steps = 4
+    loop = tqdm(data_loader, desc=f"Epoch {epoch + 1}", unit="batch")
+    for i, (x, y) in enumerate(loop):
 
-        x, y = batch[0].to(device), batch[1].to(device)
+        x, y = x.to(device), y.to(device)
         # forward pass
         y_hat = model(x)
 
@@ -20,11 +22,13 @@ def train_one_epoch(model, data_loader: DataLoader, criterion,
         loss = criterion(y_hat, y)
         total_loss += loss.item()
 
-        # zero out the gradient
-        optimizer.zero_grad()
         # backward pass
         loss.backward()
-        optimizer.step()
+
+        # zero grad and move gradient
+        if (i+1) % accumulation_steps == 0:
+            optimizer.step()
+            optimizer.zero_grad()
 
         preds = torch.argmax(y_hat, dim=-1)
         acc = (preds == y).sum().item() / len(y)
@@ -32,6 +36,7 @@ def train_one_epoch(model, data_loader: DataLoader, criterion,
 
         loop.set_postfix(loss=total_loss / (i + 1),
                          accuracy=100. * avg_acc / (i + 1))
+        del loss, y_hat
 
     total_loss /= len(data_loader)
     avg_acc /= len(data_loader)
@@ -39,27 +44,29 @@ def train_one_epoch(model, data_loader: DataLoader, criterion,
 
 
 def test_one_epoch(model, data_loader: DataLoader, criterion,
-                   epoch: int, device: str="cpu"):
+                   epoch: int, device: torch.device):
     model.eval()
     total_loss = 0.0
     avg_acc = 0.0
-    loop = tqdm(data_loader, desc=f"Epoch {epoch}", unit="batch")
-    for i, batch in enumerate(loop):
+    loop = tqdm(data_loader, desc=f"Epoch {epoch + 1}", unit="batch")
+    with torch.no_grad():
+        for i, (x, y) in enumerate(loop):
 
-        x, y = batch[0].to(device), batch[1].to(device)
-        # forward pass
-        y_hat = model(x)
+            x, y = x.to(device), y.to(device)
+            # forward pass
+            y_hat = model(x)
 
-        # calc loss
-        loss = criterion(y_hat, y)
-        total_loss += loss.item()
+            # calc loss
+            loss = criterion(y_hat, y)
+            total_loss += loss.item()
 
-        preds = torch.argmax(y_hat, dim=-1)
-        acc = (preds == y).sum().item() / len(y)
-        avg_acc += acc
+            preds = torch.argmax(y_hat, dim=-1)
+            acc = (preds == y).sum().item() / len(y)
+            avg_acc += acc
 
-        loop.set_postfix(loss=total_loss / (i + 1),
-                         accuracy=100. * avg_acc / (i + 1))
+            loop.set_postfix(loss=total_loss / (i + 1),
+                             accuracy=100. * avg_acc / (i + 1))
+            del loss, y_hat
 
     total_loss /= len(data_loader)
     avg_acc /= len(data_loader)
