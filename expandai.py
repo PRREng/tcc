@@ -54,7 +54,7 @@ if args["load"]:
     model.load_state_dict(torch.load(f"{model_name}.pth", weights_only=True))
     print("loaded model")
 criterion = torch.nn.CrossEntropyLoss()
-optimizer = torch.optim.Adam(model.parameters())
+optimizer = torch.optim.Adam(model.parameters(), lr=1.25e-4)
 scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode="min",
                                                        factor=0.5, patience=20,
                                                        min_lr=1e-6)
@@ -75,6 +75,7 @@ for epoch in range(num_epochs):
     train_losses.append(train_loss)
     test_losses.append(val_loss)
 
+print(f"Scheduler lr: {scheduler.get_last_lr()}")
 print(f"Train loss: {train_losses[-1]}, acc: {train_acc}")
 print(f"Val loss: {test_losses[-1]}, acc: {val_acc}")
 
