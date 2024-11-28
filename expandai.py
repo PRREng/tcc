@@ -6,7 +6,8 @@ import torch
 from torch.utils.data import DataLoader
 from sklearn.model_selection import train_test_split
 # from vit import ViT
-from optimvit import ViT
+# from optimvit import ViT
+from hybridvit import ViT
 import matplotlib.pyplot as plt
 from epoch import train_one_epoch, test_one_epoch
 import argparse
@@ -33,7 +34,7 @@ test_dataset = dataset2.MyDataSet(X_test, y_test)
 
 # crie o dataloader
 train_loader = DataLoader(dataset=train_dataset,
-                          batch_size=1024, shuffle=True,
+                          batch_size=128, shuffle=True,
                           pin_memory=True)
 test_loader = DataLoader(dataset=test_dataset, batch_size=32,
                          shuffle=False, pin_memory=True)
@@ -54,7 +55,7 @@ if args["load"]:
     model.load_state_dict(torch.load(f"{model_name}.pth", weights_only=True))
     print("loaded model")
 criterion = torch.nn.CrossEntropyLoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=1.25e-4)
+optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
 scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode="min",
                                                        factor=0.5, patience=20,
                                                        min_lr=1e-6)
