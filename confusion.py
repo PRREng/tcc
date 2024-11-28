@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, \
         roc_curve, auc
-from model import ViT
+from vit import ViT
 
 # Load test data from the .h5 file
 test_data_path = "test_data.h5"
@@ -35,7 +35,7 @@ print(x_tensor.shape)
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # Load the saved PyTorch model
-model_name = "vit_r13_200"
+model_name = "vit_r13"
 hyperparams = {
     "in_features": 4,
     "d_model": 25,
