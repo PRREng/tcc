@@ -14,7 +14,7 @@ class Embedding(nn.Module):
             nn.LayerNorm(100),
             nn.Conv1d(in_features, 16, 5),
             nn.ReLU(),
-            nn.LayerNorm(50),
+            nn.LayerNorm(96),
             nn.Conv1d(16, d_model, 5),
             nn.ReLU()
         )
@@ -24,7 +24,7 @@ class Embedding(nn.Module):
         x = x.permute(0, 2, 1).contiguous()
         # x shape -> (B, in_features, Seq_len)
         x = self.projection(x)
-        # x shape -> (B, seq_len, d_m)
+        # x shape -> (B, d_m, seq_len - 8)
         return x
 
 
@@ -35,18 +35,18 @@ class PositionalEncoding(nn.Module):
 
         self.cls_token = nn.Parameter(torch.randn(1, 1, d_model),
                                       requires_grad=True)
-        self.pe = nn.Parameter(torch.randn(1, seq_len + 1, d_model),
+        self.pe = nn.Parameter(torch.randn(1, seq_len - 7, d_model),
                                requires_grad=True)
 
     def forward(self, x):
-        # x shape -> (B, seq_len, d_m)
+        # x shape -> (B, d_m, seq_len - 8)
         # x = x.squeeze(1)
-
-        B, seq_len, _ = x.shape
+        x = x.permute(0, 2, 1).contiguous()
+        B, squeeze_seq, _ = x.shape
         cls_token = self.cls_token.expand(B, -1, -1)
         x = torch.cat([cls_token, x], dim=1)
-        # x shape -> (B, seq_len + 1, d_m)
-        x = x + self.pe[:, : seq_len + 1]
+        # x shape -> (B, seq_len - 7, d_m)
+        x = x + self.pe[:, : squeeze_seq + 1]
         return x
 
 
