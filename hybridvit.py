@@ -14,9 +14,11 @@ class Embedding(nn.Module):
             nn.LayerNorm(100),
             nn.Conv1d(in_features, 16, 5),
             nn.ReLU(),
-            nn.LayerNorm(96),
+            nn.MaxPool1d(2),
+            nn.LayerNorm(48),
             nn.Conv1d(16, d_model, 5),
-            nn.ReLU()
+            nn.ReLU(),
+            nn.MaxPool1d(2)
         )
 
     def forward(self, x):
