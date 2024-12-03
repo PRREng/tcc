@@ -7,7 +7,7 @@ from torch.utils.data import DataLoader
 from sklearn.model_selection import train_test_split
 # from vit import ViT
 # from optimvit import ViT
-from hybridvit import ViT
+from hybridvit4 import ViT
 import matplotlib.pyplot as plt
 from epoch import train_one_epoch, test_one_epoch
 import argparse
