@@ -42,11 +42,7 @@ python testmodel.py
 
 ## License
 
-This project is licensed under the MIT License. See `LICENSE` for more details.
-
-## Contact
-
-For questions or suggestions, feel free to reach out via [email](mailto:your-email@example.com).
+This project is licensed under the MIT License.
 ```
 
 Let me know if you'd like me to adjust anything, such as placeholders or add additional sections!
