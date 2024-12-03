@@ -1,6 +1,3 @@
-Great! Here's a draft for your `README.md`:
-
-```markdown
 # EIS Deep Learning Classifier
 
 A deep learning-based model for **Electrochemical Impedance Spectroscopy (EIS)** analysis, designed to classify equivalent circuits. This tool aims to assist researchers and engineers in automating the identification of equivalent circuit models, streamlining the analysis of impedance data.
