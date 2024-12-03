@@ -3,3 +3,5 @@ torchvision
 pyyaml
 scikit-learn
 matplotlib
+pandas
+numpy
