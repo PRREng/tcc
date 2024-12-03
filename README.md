@@ -29,7 +29,7 @@ A deep learning-based model for **Electrochemical Impedance Spectroscopy (EIS)**
 ## Usage
 
 ### Training
-To train the model on your dataset:
+To train the model:
 ```bash
 python expandai.py -m hybridv4 -l true
 ```
