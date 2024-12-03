@@ -43,6 +43,3 @@ python testmodel.py
 ## License
 
 This project is licensed under the MIT License.
-```
-
-Let me know if you'd like me to adjust anything, such as placeholders or add additional sections!
