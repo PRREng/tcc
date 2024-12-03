@@ -31,29 +31,14 @@ A deep learning-based model for **Electrochemical Impedance Spectroscopy (EIS)**
 ### Training
 To train the model on your dataset:
 ```bash
-python train.py --data_path <path_to_data> --epochs 50 --batch_size 32
+python expandai.py -m hybridv4 -l true
 ```
 
 ### Evaluation
 To evaluate the model on test data:
 ```bash
-python evaluate.py --data_path <path_to_test_data>
+python testmodel.py
 ```
-
-### Prediction
-To predict the equivalent circuit of a new sample:
-```bash
-python predict.py --sample <path_to_sample>
-```
-
-## Contributing
-
-Contributions are welcome! If you’d like to improve this project, please:
-1. Fork the repository.
-2. Create a new branch (`git checkout -b feature-branch`).
-3. Commit your changes (`git commit -m "Add a feature"`).
-4. Push to the branch (`git push origin feature-branch`).
-5. Open a pull request.
 
 ## License
 
